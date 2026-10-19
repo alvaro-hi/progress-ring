@@ -529,9 +529,12 @@ describe('lista de tareas de la app', () => {
     expect(app).toContain('your task list already drives the card')
     expect(app).toContain('child accept <id> <cid>` (no extra step: your task list already counts that work)')
     expect(app).not.toContain('Close each step')
+    expect(app).toContain('One card is one objective')
+    expect(app).toContain('without the previous objective\'s finished steps')
     const terminal = await ruleIn($, ['Bash', 'Read'])
     expect(terminal).toContain('Close each step when it is finished')
     expect(terminal).toContain('child accept <id> <cid>` (counts a step)')
+    expect(terminal).toContain('One card is one objective')
     expect(terminal).not.toContain('task list already')
   })
 

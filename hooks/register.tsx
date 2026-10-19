@@ -108,7 +108,9 @@ Use the \`progress\` CLI only for what the task list does not carry; call it fro
 - Loops or iterations: \`${P} set <id> --iters N\`, then \`${P} set <id> --iter N\` as each one starts.
 ${children}
 - If the plan stops, is abandoned or the user cancels it: \`${P} cancel <id>\` in that same turn. \`${P} pause <id>\` only if it will surely be resumed.
-- The card starts titled with the list's first step; when the hook names the card, give it a clearer title in the user's language: \`${P} set <id> --title "…"\`.
+- One card is one objective (what the user asked for), not a session or a deliverable. When the objective changes, send a fresh task list for it, without the previous objective's finished steps: the hook closes the old card and opens a new one. To go on with the same objective, keep its finished steps in the list.
+- When the hook says a card opened, title it with its objective right away, in the user's language: \`${P} set <id> --title "…"\`.
+- Keep plans short: if an objective needs more than about 8 steps, split it into sub-objectives and work through them one task list at a time; each becomes its own card, titled with its sub-objective.
 ${foreign}
 ${data}`
   }
@@ -120,6 +122,7 @@ The user follows your long plans as progress cards: a band above the prompt, the
 - When the plan is approved (or you start executing it): \`${P} start <id> "Title" --total N [--iters N]\` (short lowercase id such as \`auth-refactor\`; add \`--cwd <dir>\` if the work lives in another folder), then \`${P} plan <id> key="Step" other="Step" …\` with the plan's steps.
 - Close each step when it is finished, never when it starts: \`${P} step <id> "what was closed" --key <key>\`.
 - Replan: \`${P} plan <id> --add key="Step" [--after key]\` or \`--remove key\`; a card without a plan: \`${P} set <id> --total N\`.
+- One card is one objective (what the user asked for), not a session or a deliverable, and its title names that objective. When the objective changes, finish or cancel the card and start a new one. If an objective needs more than about 8 steps, split it into sub-objectives with a card each, worked one at a time.
 ${foreign}
 ${children}
 - When finished: \`${P} done <id>\`. If the plan stops, is abandoned or the user cancels it: \`${P} cancel <id>\` in that same turn. \`${P} pause <id>\` only if it will surely be resumed. A plan with every step closed closes itself when the turn ends.

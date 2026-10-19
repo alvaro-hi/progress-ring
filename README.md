@@ -12,7 +12,7 @@ See how far along Claude Code is in a long plan, without reading the transcript.
 
 You don't have to tell Claude to use it: the plugin teaches it when to open a card, close steps, accept subagent work and finish.
 
-**In the Claude desktop app**, Claude already keeps a task list under its last message. Progress Ring follows that list instead of asking Claude to keep a second one: a list of three or more steps opens a card, each step Claude completes closes there, and the card finishes with the turn. Claude uses the `progress` command only for what the list doesn't carry: iterations, accepting subagent work, cancelling or pausing, and a clearer title. In the terminal, nothing changes.
+**In the Claude desktop app**, Claude already keeps a task list under its last message. Progress Ring follows that list instead of asking Claude to keep a second one: a list of three or more steps opens a card, each step Claude completes closes there, and the card finishes with the turn. One card is one objective: when Claude moves on to something else, that card closes and a new one opens, titled with the new objective. Claude uses the `progress` command only for what the list doesn't carry: iterations, accepting subagent work, cancelling or pausing, and a clearer title. In the terminal, nothing changes.
 
 ![The band opened: done steps, the current one with its agent, and what's next](docs/media/band-desktop-open.png)
 

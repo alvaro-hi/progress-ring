@@ -12,7 +12,7 @@ Ve por dónde va Claude Code en un plan largo sin leerte la conversación. Cuand
 
 No hace falta decirle a Claude que lo use: el plugin le enseña cuándo abrir una ficha, cerrar pasos, aceptar el trabajo de los subagentes y terminar.
 
-**En la app de escritorio de Claude**, Claude ya lleva una lista de tareas bajo su último mensaje. Progress Ring sigue esa lista en lugar de pedirle a Claude que lleve otra: una lista de tres pasos o más abre una ficha, cada paso que Claude completa se cierra en ella y la ficha termina con el turno. Claude solo usa el comando `progress` para lo que la lista no lleva: iteraciones, aceptar el trabajo de los subagentes, cancelar o pausar, y un título más claro. En la terminal no cambia nada.
+**En la app de escritorio de Claude**, Claude ya lleva una lista de tareas bajo su último mensaje. Progress Ring sigue esa lista en lugar de pedirle a Claude que lleve otra: una lista de tres pasos o más abre una ficha, cada paso que Claude completa se cierra en ella y la ficha termina con el turno. Una ficha es un objetivo: cuando Claude pasa a otra cosa, esa ficha se cierra y se abre otra, con el título del nuevo objetivo. Claude solo usa el comando `progress` para lo que la lista no lleva: iteraciones, aceptar el trabajo de los subagentes, cancelar o pausar, y un título más claro. En la terminal no cambia nada.
 
 ![La banda desplegada: pasos hechos, el actual con su agente y lo que viene](docs/media/band-desktop-open.png)
 

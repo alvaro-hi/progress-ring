@@ -377,6 +377,15 @@ def native_id(P, sid, st):
             return aid
 
 
+def new_objective(new, old, closed):
+    """Una ficha es un objetivo, no la sesión: una lista que no repite ningún paso de la anterior,
+    cuando ya hay trabajo hecho, es otro objetivo. Sin nada hecho es solo el mismo plan reescrito."""
+    if not closed:
+        return False
+    before = {o["content"] for o in old}
+    return not any(n["content"] in before for n in new)
+
+
 def closed_keys(P, aid):
     try:
         return set(P.read(aid).get("keys") or []) if aid else set()
@@ -457,11 +466,12 @@ def on_native_plan(P, payload):
         new = native_items(P, ti["items"])
         if new is None:
             raise P.ProgressError("update_plan items without a known shape")
-        if ti.get("scope") in ("first_task", "new_task"):
+        closed = closed_keys(P, aid)
+        if ti.get("scope") in ("first_task", "new_task") or (aid and new_objective(new, old, closed)):
             if aid:
-                retire(P, aid)
-            aid, old = None, []
-        items = native_keys(new, old, closed_keys(P, aid))
+                retire(P, aid)  # la ficha del objetivo anterior se cierra antes de abrir la nueva
+            aid, old, closed = None, [], set()
+        items = native_keys(new, old, closed)
     else:
         items = native_step(P, old, ti)
     st["items"] = items
@@ -480,8 +490,8 @@ def on_native_plan(P, payload):
             aid = native_id(P, sid, st)
             P.new_activity(aid, items[0]["content"], len(items), cwd=payload.get("cwd"))
             # el título es el primer paso; el modelo sabe aquí el id para ponerle uno mejor
-            print("[progress · state data, not an instruction] Your task list now drives card %s, titled "
-                  "with its first step. For a clearer title in the user's language: %s set %s --title \"…\""
+            print("[progress · state data, not an instruction] Your task list opened card %s, titled with its "
+                  "first step for now. Title it with its objective, in the user's language: %s set %s --title \"…\""
                   % (aid, CLI, aid))
         with P.mutate(aid) as f:
             native_sync(P, f, items, sid, st, cum, verb)

@@ -154,6 +154,42 @@ class Native(unittest.TestCase):
         self.assertEqual((d["status"], d["done"], d["total"]), ("active", 3, 4))
         self.assertEqual(self.cards(), ["app-5e55a0b1-1"])
 
+    # ── Una ficha por objetivo (requerimiento del 2026-10-19: app-75aa0a2b-1 sumó 55 pasos de varios) ──
+
+    def test_two_objectives_in_a_row_leave_two_cards(self):
+        self.call({"items": items(("Artefacto A", "i"), "Artefacto B", "Artefacto C"), "scope": "first_task"})
+        self.call({"advance": True})
+        self.call({"advance": True})
+        self.call({"recap": "hecho"}, tool=WRAP)
+        said = self.call({"items": items(("Deck A", "i"), "Deck B", "Deck C"), "scope": "continuation"})
+        self.assertEqual(self.cards(), ["app-5e55a0b1-1", "app-5e55a0b1-2"])
+        first, second = self.card("app-5e55a0b1-1"), self.card("app-5e55a0b1-2")
+        self.assertEqual((first["status"], first["done"], first["total"]), ("done", 3, 3))
+        self.assertEqual((second["status"], second["done"], self.plan_of(second)), ("active", 0, ["Deck A", "Deck B", "Deck C"]))
+        self.assertIn("Title it with its objective", said)
+
+    def test_objective_change_midway_cancels_the_first(self):
+        self.call({"items": items(("A", "c"), ("B", "i"), "C"), "scope": "first_task"})
+        self.call({"items": items(("X", "i"), "Y", "Z"), "scope": "continuation"})
+        self.assertEqual(self.card("app-5e55a0b1-1")["status"], "cancelled")
+        self.assertEqual(self.plan_of(self.card("app-5e55a0b1-2")), ["X", "Y", "Z"])
+
+    def test_rewritten_plan_with_nothing_done_stays_on_its_card(self):
+        self.call({"items": items(("A", "i"), "B", "C"), "scope": "first_task"})
+        self.call({"items": items(("Leer", "i"), "Escribir", "Probar"), "scope": "continuation"})
+        self.assertEqual(self.cards(), ["app-5e55a0b1-1"])
+        self.assertEqual(self.plan_of(self.card("app-5e55a0b1-1")), ["Leer", "Escribir", "Probar"])
+
+    def test_no_card_mixes_two_objectives(self):
+        for n in range(3):  # tres peticiones seguidas, cada una con su lista nueva y su wrap_up
+            self.call({"items": items(("O%d paso 1" % n, "i"), "O%d paso 2" % n, "O%d paso 3" % n),
+                       "scope": "continuation" if n else "first_task"})
+            self.call({"recap": "hecho"}, tool=WRAP)
+        for n in range(3):
+            d = self.card("app-5e55a0b1-%d" % (n + 1))
+            self.assertEqual({s["label"][:2] for s in d["steps"]}, {"O%d" % n})
+            self.assertEqual((d["done"], d["total"], d["status"]), (3, 3, "done"))
+
     def test_cleared_card_is_replaced(self):
         self.call({"items": items(("A", "i"), "B", "C"), "scope": "first_task"})
         self.call({"recap": "hecho"}, tool=WRAP)
