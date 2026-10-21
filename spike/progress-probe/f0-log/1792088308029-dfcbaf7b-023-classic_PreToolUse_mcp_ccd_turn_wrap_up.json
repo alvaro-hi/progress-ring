@@ -1,9 +1,0 @@
-{
-  "event": "classic.PreToolUse-mcp__ccd_turn__wrap_up",
-  "at": 1792088308029,
-  "data": {
-    "recap": "Los 4 pasos están hechos en el scratchpad: a.txt («uno»), b.txt («dos») y c.txt («tres») creados, y el listado confirma los tres ficheros. No se ha tocado el vault ni ningún repo.",
-    "tool": "mcp__ccd_turn__wrap_up",
-    "tool_use_id": "toolu_01SrRZ2xmGdDqwebNmkSJxnH"
-  }
-}

@@ -1,9 +1,0 @@
-{
-  "event": "tool.call-in-mcp__ccd_turn__update_plan",
-  "at": 1792088301594,
-  "data": {
-    "advance": true,
-    "tool": "mcp__ccd_turn__update_plan",
-    "tool_use_id": "toolu_01Sd5Ecc3ySMVspYUqxuxq5c"
-  }
-}
